@@ -40,7 +40,9 @@ router.post("/login", async (req, res) => {
     const userToLogin = await User.findOne({ email: req.body.email });
 
     if (!userToLogin) {
-      return res.status(400).send("User not found");
+      return res
+        .status(400)
+        .send({ message: "User Not Found With Provided Email Address" });
     }
 
     const validPassword = await bcrypt.compare(
@@ -49,7 +51,7 @@ router.post("/login", async (req, res) => {
     );
 
     if (!validPassword) {
-      return res.status(400).send("Invalid password");
+      return res.status(400).send({ message: "Invalid password" });
     }
 
     const authToken = await generateAuthToken(userToLogin._id);
