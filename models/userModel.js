@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 const userSchema = mongoose.Schema(
   {
     name: { type: "String", required: true },
@@ -7,7 +8,6 @@ const userSchema = mongoose.Schema(
     password: { type: "String", required: true },
     pic: {
       type: "String",
-      required: true,
       default:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpaTTohNZ3rp44K7dWEeDsrLtFx-n23eZPjZLvf7Sx_CoOvLAgLVmKTrV4nbrH1xugAqc&usqp=CAU",
     },
@@ -17,21 +17,24 @@ const userSchema = mongoose.Schema(
       default: false,
     },
   },
-  { timestaps: true }
+  { timestamps: true }
 );
 
-userSchema.methods.matchPassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+// userSchema.methods.matchPassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
+
+// userSchema.pre("save", async function (next) {
+//   if (!this.isModified) {
+//     next();
+//   }
+
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
+const generateAuthToken = (id) => {
+  return jwt.sign({ id }, process.env.SECRET_KEY);
 };
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified) {
-    next();
-  }
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
-
-const User = mongoose.model("User", userSchema);
-export default User;
+export const User = mongoose.model("User", userSchema);
+export { generateAuthToken };
