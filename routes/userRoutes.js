@@ -1,6 +1,7 @@
 import express from "express";
 import { generateAuthToken, User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
+import { isAuthorized } from "../middleware/authMiddleWare.js";
 
 let router = express.Router();
 
@@ -59,6 +60,24 @@ router.post("/login", async (req, res) => {
       authToken: authToken,
       userDetails: userToLogin,
     });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send();
+  }
+});
+
+router.get("/all", isAuthorized, async (req, res) => {
+  try {
+    let keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "i" } },
+            { email: { $regex: req.query.search, $options: "i" } },
+          ],
+        }
+      : {};
+    let users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+    res.status(200).send(users);
   } catch (error) {
     console.log(error);
     res.status(500).send();

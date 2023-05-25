@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
-import chats from "./data.js";
 import dotenv from "dotenv";
 import { dataBaseConnection } from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
+import { chatRoutes } from "./routes/chatRoutes.js";
 
 const app = express();
 
@@ -16,7 +16,9 @@ app.get("/", (req, res) => {
 
 app.use(cors());
 app.use(express.json());
+
 app.use("/user", userRoutes);
+app.use("/chat", chatRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server Has Started");
