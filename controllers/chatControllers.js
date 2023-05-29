@@ -71,15 +71,10 @@ export const fetchChats = async (req, res) => {
 };
 
 export const createGroup = async (req, res) => {
+  if (!req.body.users || !req.body.name) {
+    return res.status(400).send({ message: "Please Fill all the feilds" });
+  }
   try {
-    if (!req.body.users) {
-      return res
-        .status(400)
-        .send({ message: "Please add members to the group" });
-    }
-    if (!req.body.name) {
-      return res.status(400).send({ message: "Please name the group" });
-    }
     let members = await JSON.parse(req.body.users);
 
     if (members.length < 2) {
