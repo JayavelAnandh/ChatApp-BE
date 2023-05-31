@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { dataBaseConnection } from "./db.js";
 import userRoutes from "./routes/userRoutes.js";
 import { chatRoutes } from "./routes/chatRoutes.js";
+import { messageRoutes } from "./routes/messageRoutes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(express.json());
 
 app.use("/user", userRoutes);
 app.use("/chat", chatRoutes);
+app.use("/message", messageRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log("Server Has Started");
