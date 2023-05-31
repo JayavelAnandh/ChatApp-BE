@@ -11,6 +11,7 @@ router.get("/:chatId", isAuthorized, async (req, res) => {
     let messages = await Message.find({ chat: req.params.chatId })
       .populate("sender", "name pic email")
       .populate("chat");
+    res.status(200).json(messages);
   } catch (error) {
     console.log(error);
     res.status(500).send();
