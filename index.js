@@ -31,7 +31,7 @@ const io = new Server(server, {
     origin: "*",
   },
   path: "/socket.io",
-  transports: ["websocket"],
+  transports: ["websocket", "polling"],
   secure: true,
 });
 io.on("connection", (socket) => {
