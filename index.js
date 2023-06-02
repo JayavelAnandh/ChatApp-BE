@@ -30,7 +30,9 @@ const io = new Server(server, {
   cors: {
     origin: "*",
   },
+  path: "/socket.io",
   transports: ["websocket"],
+  secure: true,
 });
 io.on("connection", (socket) => {
   console.log("connected with socket.io");
