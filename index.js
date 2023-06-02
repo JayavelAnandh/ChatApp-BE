@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
   res.send("Server is ready to receive reqs");
 });
 
-app.use(cors());
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 app.use("/user", userRoutes);
